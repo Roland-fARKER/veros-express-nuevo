@@ -1,0 +1,33 @@
+<app-loader/>
+<div class="cont-1">
+    <div class="cont-2">
+        <app-ilustracion1 />
+    </div>
+    <div class="cont-3">
+        <img src="./../../../../assets/img/logo.png" class=" logo"/>
+        <h3>Bienvenido de nuevo</h3>
+        <p>Control de bodega de veros express</p>
+        <form [formGroup]=" loginForm" autocomplete="off" (ngSubmit)="onLogin()">
+            <div class="field">
+                <span class="p-float-label">
+                    <input pInputText id="userName" formControlName="userName" />
+                    <label htmlFor="userName">Nombre de usuario</label>
+                </span>
+            </div>
+            <div class="field">
+                <span class="p-float-label">
+                    <p-password id="password" formControlName="password" [feedback]="false"
+                        [toggleMask]="true"></p-password>
+                    <label for="password">Contraseña</label>
+                </span>
+            </div>
+           <!--  <div class="field">
+                <a routerLink="/Account/RecuperCuenta"><strong>Ha olvidado su contraseña?</strong></a>
+            </div> -->
+            <div class="field">
+                <p-button label="Log In" type="submit"></p-button>
+            </div>
+        </form>
+    </div>
+</div>
+<p-toast></p-toast>

@@ -1,0 +1,40 @@
+<h2>Crear usuarios</h2>
+<p-toast></p-toast>
+
+<div class="cont-1">
+    <div class="cont-2">
+        <img src="../../../../assets/img/user Register.svg"/>
+    </div>
+    <div class="con-3">
+        <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+
+            <div class="p-inputgroup">
+                <span class="p-inputgroup-addon">
+                    <i class="pi pi-user"></i>
+                </span>
+                <input pInputText placeholder="Nombre de usuario" formControlName="userName" />
+            </div>
+
+            <div class="p-inputgroup">
+                <span class="p-inputgroup-addon">
+                    <i class="pi pi-user"></i>
+                </span>
+                <input pInputText placeholder="Nombre y apellido" formControlName="name" />
+            </div>
+
+            <div class="continput">
+                <label for="admin">Hacer admin este usuario?   </label>
+                <p-inputSwitch formControlName="admin"></p-inputSwitch>
+            </div>
+
+            <div class="p-inputgroup">
+                <span class="p-inputgroup-addon">
+                    <i class="pi pi-key"></i>
+                </span>
+                <input pInputText placeholder="Contraseña" formControlName="password" />
+            </div>
+
+            <p-button type="submit" icon="pi pi-send" label="Registrar Usuario"></p-button>
+        </form>
+    </div>
+</div>

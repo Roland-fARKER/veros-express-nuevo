@@ -8,7 +8,7 @@ import { LoginComponent } from './View/Account/login/login.component';
 import { DashboardComponent } from './View/dashboard/dashboard.component';
 import { CrearUsuariosComponent } from './View/Account/crear-usuarios/crear-usuarios.component';
 import { FamiliasComponent } from './View/Account/familias/familias.component';
-
+import { ProveedoresComponent } from './View/Account/proveedores/proveedores.component';
 //Guards
 import { AuthenticationGuard } from './Guards/authentication.guard';
 
@@ -31,6 +31,10 @@ const routes: Routes = [
       {
         path: 'Familias',
         component: FamiliasComponent,
+      },
+      {
+        path: 'Proveedores',
+        component: ProveedoresComponent,
       }
     ],
   },

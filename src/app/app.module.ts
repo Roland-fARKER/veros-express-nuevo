@@ -11,7 +11,7 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
 import { MessageService } from 'primeng/api';
-
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 //Primeng
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
@@ -21,6 +21,7 @@ import { ToastModule } from 'primeng/toast';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { TableModule } from 'primeng/table';
 import { DialogModule } from 'primeng/dialog';
+import { ConfirmationService } from 'primeng/api';
 
 import { TokenHttpInterceptor } from './Interceptors/token.interceptor';
 //import { StatusHttpInterceptor } from './Interceptors/status.interceptor';
@@ -34,6 +35,7 @@ import { DashboardComponent } from './View/dashboard/dashboard.component';
 import { LoaderComponent } from './loader/loader.component';
 import { CrearUsuariosComponent } from './View/Account/crear-usuarios/crear-usuarios.component';
 import { FamiliasComponent } from './View/Account/familias/familias.component';
+import { ProveedoresComponent } from './View/Account/proveedores/proveedores.component';
 
 @NgModule({
   declarations: [
@@ -43,6 +45,7 @@ import { FamiliasComponent } from './View/Account/familias/familias.component';
     LoaderComponent,
     CrearUsuariosComponent,
     FamiliasComponent,
+    ProveedoresComponent,
   ],
   imports: [
     BrowserModule,
@@ -59,14 +62,16 @@ import { FamiliasComponent } from './View/Account/familias/familias.component';
     InputSwitchModule,
     TableModule,
     FormsModule,
-    DialogModule
+    DialogModule,
+    ConfirmDialogModule
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA
   ],
   providers: [
     AuthenticationService, 
-    MessageService
+    MessageService,
+    ConfirmationService
   ],
   bootstrap: [AppComponent]
 })

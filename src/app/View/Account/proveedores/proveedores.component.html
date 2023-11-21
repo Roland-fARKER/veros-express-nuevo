@@ -1,19 +1,33 @@
 <!-- proveedores.component.html -->
 <p-dialog [(visible)]="displayDialog" [modal]="true" [responsive]="true" [style]="{ width: '450px' }">
   <div *ngIf="displayDialog">
-    <h3>{{ selectedProveedor.id_Proveedor ? 'Editar' : 'Agregar' }} Proveedor</h3>
+    <h3>{{ selectedProveedor.id ? 'Editar' : 'Agregar' }} Proveedor</h3>
     <form (ngSubmit)="saveProveedor()" [formGroup]="proveedorForm">
       <div class="form-group">
-        <label for="nombreProveedor">Nombre Proveedor:</label>
-        <input type="text" id="nombreProveedor" name="nombreProveedor" formControlName="Nombre_Proveedor" />
+        <div class="p-inputgroup">
+          <span class="p-inputgroup-addon">
+            <i class="pi pi-user"></i>
+          </span>
+          <input id="nombrer" name="nombre" formControlName="nombre" pInputText type="text"
+            placeholder="Nombre" />
+        </div>
       </div>
       <div class="form-group">
-        <label for="estado">Estado:</label>
-        <input type="checkbox" id="estado" name="estado" formControlName="Estado" />
+        <label for="estado">
+          <p>Estado:</p>
+        </label>
+        <p-inputSwitch type="checkbox" id="estado" name="estado" formControlName="estado"></p-inputSwitch>
       </div>
       <div class="form-group">
-        <label for="numTelefono">Num_Telefono:</label>
-        <input type="number" id="numTelefono" name="numTelefono" formControlName="Num_Telefono" />
+        <div class="p-inputgroup">
+          <span class="p-inputgroup-addon">
+            <i class="pi pi-phone"></i>
+          </span>
+
+          <p-inputNumber id="telefono" name="telefono" formControlName="telefono"
+            placeholder="Numero telefónico" mode="decimal" inputId="withoutgrouping" [useGrouping]="false">
+          </p-inputNumber>
+        </div>
       </div>
       <!-- Otros campos del formulario según tu modelo de datos -->
 
@@ -36,12 +50,12 @@
   </ng-template>
   <ng-template pTemplate="body" let-proveedor>
     <tr>
-      <td>{{ proveedor.Nombre_Proveedor }}</td>
-      <td>{{ proveedor.Num_Telefono}}</td>
-      <td>{{ proveedor.Estado}}</td>
+      <td>{{ proveedor.nombre }}</td>
+      <td>{{ proveedor.telefono}}</td>
+      <td>{{ proveedor.estado}}</td>
       <td>
         <button pButton icon="pi pi-pencil" (click)="editProveedor(proveedor)"></button>
-        <button pButton icon="pi pi-trash" (click)="deleteProveedor(proveedor.id_Proveedor)"></button>
+        <button pButton icon="pi pi-trash" (click)="deleteProveedor(proveedor.id)"></button>
       </td>
     </tr>
   </ng-template>

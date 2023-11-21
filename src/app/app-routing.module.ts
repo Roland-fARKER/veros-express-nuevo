@@ -21,20 +21,22 @@ const routes: Routes = [
   {
     path: 'Dashboard',
     component: DashboardComponent,
-    //canActivate: [AuthenticationGuard],
+    canActivate: [AuthenticationGuard],
     children: [
       {
         path: 'RegistrarUsuarios',
         component: CrearUsuariosComponent,
-        //canActivate: [AuthenticationGuard],
+        canActivate: [AuthenticationGuard],
       },
       {
         path: 'Familias',
         component: FamiliasComponent,
+        canActivate: [AuthenticationGuard],
       },
       {
         path: 'Proveedores',
         component: ProveedoresComponent,
+        canActivate: [AuthenticationGuard],
       }
     ],
   },

@@ -22,7 +22,7 @@ import { InputSwitchModule } from 'primeng/inputswitch';
 import { TableModule } from 'primeng/table';
 import { DialogModule } from 'primeng/dialog';
 import { ConfirmationService } from 'primeng/api';
-
+import { InputNumberModule } from 'primeng/inputnumber';
 import { TokenHttpInterceptor } from './Interceptors/token.interceptor';
 //import { StatusHttpInterceptor } from './Interceptors/status.interceptor';
 import { AuthenticationService } from './Services/authentication.service';
@@ -63,7 +63,8 @@ import { ProveedoresComponent } from './View/Account/proveedores/proveedores.com
     TableModule,
     FormsModule,
     DialogModule,
-    ConfirmDialogModule
+    ConfirmDialogModule,
+    InputNumberModule
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA

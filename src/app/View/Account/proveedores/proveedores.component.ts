@@ -23,9 +23,9 @@ export class ProveedoresComponent implements OnInit {
     private messageService: MessageService
   ) {
     this.proveedorForm = this.fb.group({
-      Nombre_Proveedor: ['', [Validators.required]],
-      Estado: [false, [Validators.required]],
-      Num_Telefono: [null, [Validators.required]],
+      nombre: ['', [Validators.required]],
+      estado: [false, [Validators.required]],
+      telefono: [null, [Validators.required]],
     });
   }
 
@@ -41,9 +41,9 @@ export class ProveedoresComponent implements OnInit {
 
   showDialogToAdd(): void {
     this.selectedProveedor = {
-      Nombre_Proveedor: '',
-      Estado: true,
-      Num_Telefono: null,
+      nombre: '',
+      estado: true,
+      telefono: null,
     };
     this.proveedorForm.reset();
     this.displayDialog = true;
@@ -51,21 +51,31 @@ export class ProveedoresComponent implements OnInit {
 
   editProveedor(proveedor: any): void {
     this.selectedProveedor = { ...proveedor };
+
+    // Asigna los valores del proveedor al formulario
+    this.proveedorForm.setValue({
+      nombre: this.selectedProveedor.nombre,
+      estado: this.selectedProveedor.estado,
+      telefono: this.selectedProveedor.telefono,
+    });
+
     this.displayDialog = true;
   }
 
   saveProveedor(): void {
     if (this.proveedorForm.valid) {
       const controls = this.proveedorForm.controls;
-  
+
       const proveedor: Proveedor = {
-        Nombre_Proveedor: controls['Nombre_Proveedor']?.value,
-        Estado: controls['Estado']?.value,
-        Num_Telefono: controls['Num_Telefono']?.value,
+        nombre: controls['nombre']?.value
+          ? controls['nombre']?.value.toString()
+          : '',
+        estado: controls['estado']?.value,
+        telefono: controls['telefono']?.value,
       };
-  
+
       const isNew = !this.selectedProveedor.id_Proveedor;
-  
+
       this.proveedoresService[isNew ? 'addProveedor' : 'updateProveedor'](
         isNew ? null : this.selectedProveedor.id_Proveedor,
         proveedor
@@ -80,8 +90,9 @@ export class ProveedoresComponent implements OnInit {
           });
         },
         (error) => {
-          console.error(error);
-          console.error(error.error);
+          console.error('Error al agregar proveedor', error);
+          console.error(error.status);
+          console.error(error.error.message);
           this.messageService.add({
             severity: 'error',
             summary: 'Error',

@@ -10,7 +10,7 @@ import { Proveedor } from '../Models/proveedor.model';
 })
 export class ProveedoresService {
   private apiUrl = 'http://localhost:3000/verosApi/v1/proveedores';
-
+  private crear =  'http://localhost:3000/verosApi/v1/proveedores/Enviar';
   constructor(private http: HttpClient) {}
 
   getAllProveedores(): Observable<Proveedor[]> {
@@ -22,7 +22,7 @@ export class ProveedoresService {
   }
 
   addProveedor(proveedor: Proveedor): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/Enviar`, proveedor);
+    return this.http.post<any>(this.crear, proveedor);
   }
 
   updateProveedor(id: number, proveedor: Proveedor): Observable<any> {

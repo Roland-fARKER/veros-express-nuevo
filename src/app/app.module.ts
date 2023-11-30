@@ -36,6 +36,7 @@ import { LoaderComponent } from './loader/loader.component';
 import { CrearUsuariosComponent } from './View/Account/crear-usuarios/crear-usuarios.component';
 import { FamiliasComponent } from './View/Account/familias/familias.component';
 import { ProveedoresComponent } from './View/Account/proveedores/proveedores.component';
+import { CategoriasComponent } from './View/Account/categorias/categorias.component';
 
 @NgModule({
   declarations: [
@@ -46,6 +47,7 @@ import { ProveedoresComponent } from './View/Account/proveedores/proveedores.com
     CrearUsuariosComponent,
     FamiliasComponent,
     ProveedoresComponent,
+    CategoriasComponent,
   ],
   imports: [
     BrowserModule,

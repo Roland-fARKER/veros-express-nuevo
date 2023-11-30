@@ -1,0 +1,49 @@
+<!-- categorias.component.html -->
+<p-toast></p-toast>
+<p-table [value]="categorias" selectionMode="single" (onRowSelect)="onRowSelect($event)"[(selection)]="selectedCategorias">
+  <ng-template pTemplate="header">
+    <tr>
+      <th>Id</th>
+      <th>Nombre</th>
+      <th>Acciones</th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-categorias>
+    <tr>
+      <td>{{ categorias.id }}</td>
+      <td>{{ categorias.Nombre_categorias }}</td>
+      <td>
+        <p-button severity="success" icon="pi pi-pencil" (click)="onRowSelect({ data: categorias })"></p-button>
+
+        <p-button severity="danger" icon="pi pi-trash" (click)="delete(categorias)"></p-button>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>
+
+<p-dialog [(visible)]="displayDialog" [modal]="true" [responsive]="true" [style]="{ width: '400px' }">
+    <div *ngIf="displayDialog">
+      <h3>{{ selectedCategorias.id ? 'Editar' : 'Agregar' }} Categorias</h3>
+      <form>
+        <p-inputGroup>
+          <p-inputGroupAddon>
+            <i class="pi pi-user"></i>
+          </p-inputGroupAddon>
+        
+          <p-inputGroupAddon>
+            <input pInputText placeholder="Nombre" id="nombre" name="nombre" [(ngModel)]="selectedCategorias.Nombre_categorias" />
+          </p-inputGroupAddon>
+        </p-inputGroup>
+        
+
+
+        
+      </form>
+      <div class="ui-dialog-buttonpane p-clearfix">
+        <button pButton icon="pi pi-check" (click)="save()"></button>
+        <button pButton icon="pi pi-times" (click)="displayDialog = false"></button>
+      </div>
+    </div>
+  </p-dialog>
+  <p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog>
+<button pButton label="Agregar Categorias" icon="pi pi-plus" (click)="showDialogToAdd()"></button>

@@ -60,6 +60,20 @@ export class FamiliasComponent implements OnInit {
     );
   }
 
+  actualizar() {
+    this.familiaService
+      .updateFamilia(this.selectedFamilia.id, this.selectedFamilia)
+      .subscribe(() => {
+        this.loadFamilias();
+        this.displayDialog = false;
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Éxito',
+          detail: 'se guardaron los cambios',
+        });
+      });
+  }
+
   delete(familia: any): void {
     this.selectedFamilia = { ...familia };
     console.log(this.selectedFamilia),

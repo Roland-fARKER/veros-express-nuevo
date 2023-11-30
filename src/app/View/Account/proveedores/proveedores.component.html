@@ -2,7 +2,7 @@
 <p-dialog [(visible)]="displayDialog" [modal]="true" [responsive]="true" [style]="{ width: '450px' }">
   <div *ngIf="displayDialog">
     <h3>{{ selectedProveedor.id ? 'Editar' : 'Agregar' }} Proveedor</h3>
-    <form (ngSubmit)="saveProveedor()" [formGroup]="proveedorForm">
+    <form (ngSubmit)="save()" [formGroup]="proveedorForm">
       <div class="form-group">
         <div class="p-inputgroup">
           <span class="p-inputgroup-addon">

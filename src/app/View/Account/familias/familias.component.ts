@@ -36,7 +36,6 @@ export class FamiliasComponent implements OnInit {
 
   save(): void {
     const isNew = !this.selectedFamilia.id;
-
     this.familiaService[isNew ? 'addFamilia' : 'updateFamilia'](
       isNew ? this.selectedFamilia : this.selectedFamilia.id,
       this.selectedFamilia
@@ -61,35 +60,43 @@ export class FamiliasComponent implements OnInit {
     );
   }
 
-  delete(): void {
-    this.confirmationService.confirm({
-      message: '¿Estás seguro de que quieres eliminar esta familia?',
-      accept: () => {
-        this.familiaService.deleteFamilia(this.selectedFamilia.id).subscribe(
-          (data) => {
-            this.loadFamilias();
-            this.displayDialog = false;
-            this.messageService.add({
-              severity: 'success',
-              summary: 'Éxito',
-              detail: 'Familia eliminada',
-            });
-          },
-          (error) => {
-            console.error(error);
-            this.messageService.add({
-              severity: 'error',
-              summary: 'Error',
-              detail: 'Error al eliminar la familia',
-            });
-          }
-        );
-      },
-    });
+  delete(familia: any): void {
+    this.selectedFamilia = { ...familia };
+    console.log(this.selectedFamilia),
+      this.confirmationService.confirm({
+        message: '¿Estás seguro de que quieres eliminar esta familia?',
+        accept: () => {
+          this.familiaService.deleteFamilia(this.selectedFamilia.id).subscribe(
+            (data) => {
+              this.loadFamilias();
+              this.displayDialog = false;
+              this.messageService.add({
+                severity: 'success',
+                summary: 'Éxito',
+                detail: 'Familia eliminada',
+              });
+            },
+            (error) => {
+              console.error(error);
+              this.messageService.add({
+                severity: 'error',
+                summary: 'Error',
+                detail: 'Error al eliminar la familia',
+              });
+            }
+          );
+        },
+      });
   }
 
   onRowSelect(event: any): void {
-    this.selectedFamilia = { ...event.data };
-    this.displayDialog = true;
+    if (event && event.data) {
+      this.selectedFamilia = { ...event.data };
+      this.displayDialog = true;
+    } else {
+      console.error(
+        'Error al seleccionar la fila. Datos de evento no válidos.'
+      );
+    }
   }
 }

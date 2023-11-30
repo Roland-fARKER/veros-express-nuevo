@@ -1,18 +1,21 @@
 <!-- familia.component.html -->
 <p-toast></p-toast>
-<p-table [value]="familias" selectionMode="single" [(selection)]="selectedFamilia" (onRowSelect)="onRowSelect($event)">
+<p-table [value]="familias" selectionMode="single" (onRowSelect)="onRowSelect($event)" [(selection)]="selectedFamilia">
   <ng-template pTemplate="header">
     <tr>
+      <th>Id</th>
       <th>Nombre</th>
       <th>Acciones</th>
     </tr>
   </ng-template>
   <ng-template pTemplate="body" let-familia>
     <tr>
+      <td>{{ familia.id }}</td>
       <td>{{ familia.Nombre_familia }}</td>
       <td>
-        <button pButton icon="pi pi-pencil" (click)="onRowSelect({ data: familia })"></button>
-        <button pButton icon="pi pi-trash" (click)="delete()"></button>
+        <p-button severity="success" icon="pi pi-pencil" (click)="onRowSelect({ data: familia })"></p-button>
+
+        <p-button severity="danger" icon="pi pi-trash" (click)="delete(familia)"></p-button>
       </td>
     </tr>
   </ng-template>
@@ -22,9 +25,14 @@
   <div *ngIf="displayDialog">
     <h3>{{ selectedFamilia.id ? 'Editar' : 'Agregar' }} Familia</h3>
     <form>
-      <label for="nombre">Nombre:</label>
-      <input type="text" id="nombre" name="nombre" [(ngModel)]="selectedFamilia.Nombre_familia" />
       <!-- Agrega el atributo 'name' al campo de entrada -->
+      <p-inputGroup>
+        <p-inputGroupAddon>
+          <i class="pi pi-user"></i>
+        </p-inputGroupAddon>
+        <input pInputText placeholder="Nombre" id="nombre" name="nombre" [(ngModel)]="selectedFamilia.Nombre_familia" />
+      </p-inputGroup>
+
     </form>
     <div class="ui-dialog-buttonpane p-clearfix">
       <button pButton icon="pi pi-check" (click)="save()"></button>

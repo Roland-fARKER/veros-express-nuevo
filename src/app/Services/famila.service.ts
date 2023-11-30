@@ -29,6 +29,7 @@ export class FamiliaService {
   updateFamilia(id: number, familia: any): Observable<any> {
     return this.http.put<any>(`${this.actualizar}/${id}`, familia);
   }
+  
 
   deleteFamilia(id: number): Observable<any> {
     return this.http.delete<any>(`${this.eliminar}/${id}`);

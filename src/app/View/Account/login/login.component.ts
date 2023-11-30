@@ -30,7 +30,7 @@ export class LoginComponent {
 
   constructor(
     private formBuilder: FormBuilder,
-    private authService: AuthenticationService,
+    private auth: AuthenticationService,
     private router: Router,
     private messageService: MessageService,
     private loaderService: LoaderService
@@ -47,7 +47,7 @@ export class LoginComponent {
 
       this.loaderService.show(); // Mostrar el loader antes del inicio de sesión
 
-      this.authService.login(userName, password).subscribe(
+      this.auth.login(userName, password).subscribe(
         (data: any) => {
           this.loaderService.hide(); // Ocultar el loader después de la autenticación
           
@@ -55,7 +55,7 @@ export class LoginComponent {
           console.log('Usuario autenticado:', data.userName);
 
           // Redirigir a la ruta 'dashboard' después de una autenticación exitosa
-          this.router.navigate(['/Dashboard']);
+          this.router.navigate(['/Dashboard/Familias']);
         },
         (error) => {
 

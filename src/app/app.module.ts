@@ -24,6 +24,8 @@ import { DialogModule } from 'primeng/dialog';
 import { ConfirmationService } from 'primeng/api';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { TokenHttpInterceptor } from './Interceptors/token.interceptor';
+
+
 //import { StatusHttpInterceptor } from './Interceptors/status.interceptor';
 import { AuthenticationService } from './Services/authentication.service';
 
@@ -66,7 +68,7 @@ import { CategoriasComponent } from './View/Account/categorias/categorias.compon
     FormsModule,
     DialogModule,
     ConfirmDialogModule,
-    InputNumberModule
+    InputNumberModule,
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA

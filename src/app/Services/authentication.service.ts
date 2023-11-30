@@ -5,6 +5,8 @@ import { MessageService } from 'primeng/api';
 import { catchError } from 'rxjs/operators';
 import { Observable, throwError } from 'rxjs';
 import { RegisterModel } from '../Models/register.model';
+import { Router } from '@angular/router';
+import { Token } from '@angular/compiler';
 
 @Injectable({
   providedIn: 'root',
@@ -15,7 +17,8 @@ export class AuthenticationService {
   //contructor de la clase HttpClient y messageservice
   constructor(
     private http: HttpClient,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private route: Router
   ) {}
 
   // Método para realizar una solicitud POST al endpoint 'register'
@@ -51,11 +54,12 @@ export class AuthenticationService {
   }
 
   public RemoveToken(): void {
-    localStorage.removeItem(environment.tokenKey);
+    localStorage.removeItem('token');
   }
 
   public LogOut(): void {
     this.RemoveToken();
+    window.location.reload();
   }
 
   isAuthenticated(): boolean {

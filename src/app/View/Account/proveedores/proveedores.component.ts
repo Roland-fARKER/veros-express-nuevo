@@ -62,46 +62,33 @@ export class ProveedoresComponent implements OnInit {
     this.displayDialog = true;
   }
 
-  saveProveedor(): void {
-    if (this.proveedorForm.valid) {
-      const controls = this.proveedorForm.controls;
-
-      const proveedor: Proveedor = {
-        nombre: controls['nombre']?.value
-          ? controls['nombre']?.value.toString()
-          : '',
-        estado: controls['estado']?.value,
-        telefono: controls['telefono']?.value,
-      };
-
-      const isNew = !this.selectedProveedor.id_Proveedor;
-
-      this.proveedoresService[isNew ? 'addProveedor' : 'updateProveedor'](
-        isNew ? null : this.selectedProveedor.id_Proveedor,
-        proveedor
-      ).subscribe(
-        (data) => {
-          this.loadProveedores();
-          this.displayDialog = false;
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Éxito',
-            detail: isNew ? 'Proveedor agregado' : 'Proveedor actualizado',
-          });
-        },
-        (error) => {
-          console.error('Error al agregar proveedor', error);
-          console.error(error.status);
-          console.error(error.error.message);
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Error',
-            detail: 'Error al guardar el proveedor',
-          });
-        }
+  save(): void {
+    const isNew = !this.selectedProveedor.id;
+    const operation = isNew ? 'addProveedor' : 'updateProveedor';
+  
+    this.proveedoresService[operation](isNew ? null : this.selectedProveedor.id, this.selectedProveedor)
+      .subscribe(
+        () => this.handleSuccess(isNew),
+        (error) => this.handleError(error)
       );
-    }
   }
+  
+  private handleSuccess(isNew: boolean): void {
+    this.loadProveedores();
+    this.displayDialog = false;
+    const message = isNew ? 'Proveedor agregado' : 'Proveedor actualizado';
+    this.showMessage('success', 'Éxito', message);
+  }
+  
+  private handleError(error: any): void {
+    console.error(error);
+    this.showMessage('error', 'Error', 'Error al guardar el proveedor');
+  }
+  
+  private showMessage(severity: string, summary: string, detail: string): void {
+    this.messageService.add({ severity, summary, detail });
+  }
+  
 
   deleteProveedor(id: number): void {
     this.confirmationService.confirm({

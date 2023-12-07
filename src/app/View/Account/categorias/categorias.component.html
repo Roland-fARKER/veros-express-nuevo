@@ -1,4 +1,5 @@
 <!-- categorias.component.html -->
+
 <p-toast></p-toast>
 <p-table [value]="categorias" selectionMode="single" (onRowSelect)="onRowSelect($event)"[(selection)]="selectedCategorias">
   <ng-template pTemplate="header">
@@ -34,10 +35,6 @@
             <input pInputText placeholder="Nombre" id="nombre" name="nombre" [(ngModel)]="selectedCategorias.Nombre_categorias" />
           </p-inputGroupAddon>
         </p-inputGroup>
-        
-
-
-        
       </form>
       <div class="ui-dialog-buttonpane p-clearfix">
         <button pButton icon="pi pi-check" (click)="save()"></button>

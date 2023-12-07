@@ -39,6 +39,7 @@ import { CrearUsuariosComponent } from './View/Account/crear-usuarios/crear-usua
 import { FamiliasComponent } from './View/Account/familias/familias.component';
 import { ProveedoresComponent } from './View/Account/proveedores/proveedores.component';
 import { CategoriasComponent } from './View/Account/categorias/categorias.component';
+import { AlmacenesComponent } from './View/Account/almacenes/almacenes.component';
 
 @NgModule({
   declarations: [
@@ -50,6 +51,7 @@ import { CategoriasComponent } from './View/Account/categorias/categorias.compon
     FamiliasComponent,
     ProveedoresComponent,
     CategoriasComponent,
+    AlmacenesComponent,
   ],
   imports: [
     BrowserModule,

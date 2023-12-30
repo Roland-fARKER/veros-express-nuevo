@@ -1,44 +1,64 @@
-<!-- alamcenes.component.html -->
-
-<p-toast></p-toast>
-<p-table [value]="almacenes" selectionMode="single" (onRowSelect)="onRowSelect($event)" [(selection)]="selectedAlmacenes">
+<!-- almacenes.component.html -->
+<div class="card">
+  <p-confirmDialog></p-confirmDialog>
+  <p-toast></p-toast>
+  <div class="mt-3">
+    <button pButton type="button" (click)="showAddForm()" class="p-button-success">Agregar Almacén</button>
+  </div>
+  <p-table [paginator]="true"
+  [rows]="5"
+  [showCurrentPageReport]="true"
+  [tableStyle]="{ 'min-width': '50rem' }"
+  currentPageReportTemplate="Mostrando de {first} a {last} de {totalRecords} entidades"
+  [rowsPerPageOptions]="[5, 10, 20]" [value]="almacenes" dataKey="id" editMode="row">
     <ng-template pTemplate="header">
       <tr>
-        <th>Id</th>
-        <th>Nombre</th>
-        <th>Acciones</th>
+        <th style="width:20%">ID</th>
+        <th style="width:20%">Nombre</th>
+        <th style="width:20%">Acciones</th>
       </tr>
     </ng-template>
-    <ng-template pTemplate="body" let-almacenes>
-      <tr>
-        <td>{{ almacenes.id }}</td>
-        <td>{{ almacenes.nombre }}</td>
+    <ng-template pTemplate="body" let-almacene let-ri="rowIndex">
+      <tr [pEditableRow]="almacene">
+        <td>{{ almacene.id }}</td>
         <td>
-          <p-button severity="success" icon="pi pi-pencil" (click)="onRowSelect({ data: almacenes })"></p-button>
-          <p-button severity="danger" icon="pi pi-trash" (click)="delete(almacenes)"></p-button>
+          <p-cellEditor>
+            <ng-template pTemplate="input">
+              <input pInputText type="text" [(ngModel)]="almacene.nombre" required>
+            </ng-template>
+            <ng-template pTemplate="output">
+              {{ almacene.nombre }}
+            </ng-template>
+          </p-cellEditor>
+        </td>
+        <td>
+          <div class="flex align-items-center justify-content-center gap-2">
+            <button *ngIf="!isRowEditing(ri)" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil" (click)="editRow(ri)" class="p-button-rounded p-button-text"></button>
+            <button *ngIf="isRowEditing(ri)" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check" (click)="saveRow(almacene, ri)" class="p-button-rounded p-button-text p-button-success mr-2"></button>
+            <button *ngIf="isRowEditing(ri)" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times" (click)="cancelRow(ri)" class="p-button-rounded p-button-text p-button-danger"></button>
+            <button pButton pRipple type="button" icon="pi pi-trash" class="p-button-rounded p-button-text" (click)="deleteAlmacene(almacene.id)"  class="p-button-rounded p-button-text p-button-danger"></button>
+          </div>
         </td>
       </tr>
     </ng-template>
   </p-table>
 
-  <p-dialog [(visible)]="displayDialog" [modal]="true" [responsive]="true" [style]="{ width: '400px' }">
-    <div *ngIf="displayDialog">
-      <h3>{{ selectedAlmacenes.id ? 'Editar' : 'Agregar' }} Almacenes</h3>
-      <form>
-        <p-inputGroup>
-          <p-inputGroupAddon>
-            <i class="pi pi-user"></i>
-          </p-inputGroupAddon>
-          <input pInputText placeholder="Nombre" id="nombre" name="nombre" [(ngModel)]="selectedAlmacenes.nombre" />
-        </p-inputGroup>
-      </form>
-      <div class="ui-dialog-buttonpane p-clearfix">
-        <button pButton icon="pi pi-check" (click)="save()"></button>
-        <button pButton icon="pi pi-times" (click)="displayDialog = false"></button>
+  
+
+  <p-dialog header="Header" [modal]="true" [responsive]="true" [(visible)]="showAddFormFlag" [style]="{width: '40vw'}">
+    
+    <div class="form-group">
+      <div class="p-inputgroup">
+        <span class="p-inputgroup-addon">
+          <i class="pi pi-pencil"></i>
+        </span>
+        <input id="nombrer" name="nombre" [(ngModel)]="newAlmacene.nombre" required pInputText type="text"
+          placeholder="Nombre" />
       </div>
     </div>
-  </p-dialog>
 
-  <p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog>
-  <button pButton label="Agregar Almacenes" icon="pi pi-plus" (click)="showDialogToAdd()"></button>
+    <button pButton type="button" (click)="addAlmacene()" class="p-button-success">Confirmar</button>
+    <button pButton type="button" (click)="cancelAdd()" class="p-button-danger">Cancelar</button>
+</p-dialog>
   
+</div>

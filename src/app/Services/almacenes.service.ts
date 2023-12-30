@@ -1,44 +1,46 @@
+// almacene.service.ts
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Observable, catchError } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+
+interface Almacene {
+  id: number;
+  nombre: string;
+}
 
 @Injectable({
   providedIn: 'root',
 })
-export class AlmacenesService {
-  private obtener = 'http://localhost:3000/verosApi/v1/almacenes/Obtener';
-  private crear = 'http://localhost:3000/verosApi/v1/almacenes/Crear';
-  private actualizar = 'http://localhost:3000/verosApi/v1/almacenes/Actualizar';
-  private eliminar = 'http://localhost:3000/verosApi/v1/almacenes/Eliminar';
-
+export class AlmaceneService {
+  private apiUrl = 'http://localhost:3000/verosApi/v1/almacenes'; 
 
   constructor(private http: HttpClient) {}
 
-  getAllAlmacenes(): Observable<any[]> {
-    return this.http.get<any[]>(this.obtener);
+  getAllAlmacenes(): Observable<Almacene[]> {
+    //solucitud http para obtener los alacenes guardados en la base de datos
+    return this.http.get<Almacene[]>(this.apiUrl + '/Obtener');
   }
 
-  getAlmacenesById(id: number): Observable<any> {
-    return this.http.get<any>(`${this.obtener}/${id}`);
+  addAlmacene(nombre: string): Observable<any> {
+    //recibe el string que se le manda y lo encapsula
+    const nuevoAlmacene = { nombre: nombre };
+    //li imprime para verificar este bein la encapsulación
+    console.log(nuevoAlmacene)
+    //envía una petición post a la url del API con el objeto que contiene el nombre
+    return this.http.post<any>(`${this.apiUrl}/Enviar`, nuevoAlmacene);
   }
 
-  addAlmacenes(almacenes: any): Observable<any> {
-    return this.http.post<any>(this.crear, almacenes).pipe(
-      catchError((error: HttpErrorResponse) => {
-        console.error('Error al agregar almacén:', error);
-        if (error.error && error.error.message) {
-          console.error('Mensaje de error del servidor:', error.error.message);
-        }
-        throw error; // Reenviar el error para que se maneje en el componente
-      })
+  updateAlmacene(id: number, almaceneData: { nombre: string }): Observable<void> {
+    //obtiene el id y los datos a actualizar y los imprime 
+    console.log(almaceneData);
+    //se envia la petición
+    return this.http.patch<void>(
+      `${this.apiUrl}/Actualizar/${id}`,
+      almaceneData
     );
   }
 
-  updateAlmacenes(id: number, almacenes: any): Observable<any> {
-    return this.http.put<any>(`${this.actualizar}/${id}`, almacenes);
-  }
-
-  deleteAlmacenes(id: number): Observable<any> {
-    return this.http.delete<any>(`${this.eliminar}/${id}`);
+  deleteAlmacene(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/Eliminar/${id}`);
   }
 }

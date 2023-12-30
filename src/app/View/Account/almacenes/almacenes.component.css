@@ -1,3 +1,10 @@
 :host ::ng-deep .p-button {
     margin: 5px;
 }
+
+.sbar{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding: 10px 15px;
+}

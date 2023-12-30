@@ -1,58 +1,59 @@
+// Importación de módulos y servicios necesarios
 import { Component, OnInit } from '@angular/core';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { AlmaceneService } from 'src/app/Services/almacenes.service';
 
+// Definición de la interfaz Almacene
 interface Almacene {
   id: number;
   nombre: string;
 }
+
+// Decorador del componente Angular
 @Component({
   selector: 'app-almacenes',
   templateUrl: './almacenes.component.html',
   styleUrls: ['./almacenes.component.css'],
   providers: [ConfirmationService, MessageService],
 })
+// Clase del componente
 export class AlmacenesComponent implements OnInit {
-  //lista donde se almacenan losdatos de los almacenes existentes
-  almacenes: Almacene[] = [];
-  //objeto para guardar temporalmente los datos de un nuevo almacen
-  newAlmacene: Almacene = { id: 0, nombre: '' };
-  //bandera para saber si esl estado esta en editar o no
-  editingRows: { [key: number]: boolean } = {};
-  //bandera para mpstrar el formulario de un nuevo almacen
-  showAddFormFlag = false;
+  // Propiedades del componente
+  almacenes: Almacene[] = []; // Lista de almacenes
+  newAlmacene: Almacene = { id: 0, nombre: '' }; // Nuevo almacén a agregar
+  editingRows: { [key: number]: boolean } = {}; // Filas en estado de edición
+  showAddFormFlag = false; // Bandera para mostrar/ocultar el formulario de agregar
+  filteredAlmacenes: Almacene[] = []; // Lista de almacenes filtrada
+  searchText: string = ''; // Texto de búsqueda
 
+  // Constructor del componente, inyección de servicios necesarios
   constructor(
     private almaceneService: AlmaceneService,
     private confirmationService: ConfirmationService,
     private messageService: MessageService
   ) {}
 
+  // Método llamado al inicializar el componente
   ngOnInit(): void {
-    //ngOnInit es una funcion que se ejecuta al iniciar el llamado al componente
-    this.loadAlmacenes();
+    this.loadAlmacenes(); // Cargar la lista de almacenes al iniciar
   }
 
+  // Método para cargar la lista de almacenes desde el servicio
   loadAlmacenes(): void {
-    //esta funcion consume el servicio de almacenes y usa el metodo getAll
-    //para traer todos los almacenes y los guarda en el array almacenes
     this.almaceneService.getAllAlmacenes().subscribe((almacenes) => {
-      this.almacenes = almacenes;
+      this.almacenes = almacenes; // Asignar la lista completa
+      this.applyFilter(); // Aplicar filtro de búsqueda si es necesario
     });
   }
 
+  // Método para agregar un nuevo almacén
   addAlmacene(): void {
-    //se encarga de enviar los datos del nuevo almacen a el servicio
     this.almaceneService.addAlmacene(this.newAlmacene.nombre).subscribe(
       () => {
-        //si todo va bien
-        //vuelve a cargar todos los almacenes
-        this.loadAlmacenes();
-        //reinicia la proiedad nombre del arreglo temporar
-        this.newAlmacene.nombre = '';
-        //cierra la bandera de agregar
-        this.showAddFormFlag = false;
-        //envia la notificaión al usuario
+        this.loadAlmacenes(); // Recargar la lista después de agregar
+        this.newAlmacene.nombre = ''; // Reiniciar el nombre del nuevo almacén
+        this.showAddFormFlag = false; // Ocultar el formulario de agregar
+        // Mensaje de éxito al usuario
         this.messageService.add({
           severity: 'success',
           summary: 'Éxito',
@@ -60,10 +61,8 @@ export class AlmacenesComponent implements OnInit {
         });
       },
       (error) => {
-        //si hay errores
-        //manda el error a la consola
         console.error('Error al agregar almacén:', error);
-        //manda notificación al usuario
+        // Mensaje de error al usuario
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
@@ -74,65 +73,62 @@ export class AlmacenesComponent implements OnInit {
     );
   }
 
+  // Método para cancelar la adición de un nuevo almacén
   cancelAdd(): void {
-    //se encarga de cerrar el formulario de agregar un almacen nuevo
-    this.showAddFormFlag = false;
-    // reiniciar lapropiedad nombre del arreglo temporal
-    this.newAlmacene.nombre = '';
+    this.showAddFormFlag = false; // Ocultar el formulario de agregar
+    this.newAlmacene.nombre = ''; // Reiniciar el nombre del nuevo almacén
   }
 
+  // Método para verificar si una fila está en estado de edición
   isRowEditing(rowIndex: number): boolean {
-    //agrega los campos de edicion segun la fila seleccionada
     return this.editingRows[rowIndex];
   }
 
-  // Esta función se llama cuando se hace clic en el botón de edición de una fila
+  // Método para iniciar la edición de una fila
   editRow(rowIndex: number): void {
-    // Se asegura de que todas las filas estén marcadas como no editadas
     Object.keys(this.editingRows).forEach(
       (key: any) => (this.editingRows[key] = false)
     );
-    // La fila específica se marca como editada
     this.editingRows[rowIndex] = true;
-    // Se actualiza newAlmacene con una copia del almacén correspondiente a la fila que se está editando
     this.newAlmacene = { ...this.almacenes[rowIndex] };
   }
 
-  // Esta función se llama cuando se hace clic en el botón de guardado después de editar una fila
+  // Método para guardar los cambios después de editar una fila
   saveRow(almacene: Almacene, rowIndex: number): void {
-    // Se marca la fila como no editada
-    this.editingRows[rowIndex] = false;
-    // Se crea un objeto con la propiedad 'nombre' del almacén para enviar al servicio de actualización
+    this.editingRows[rowIndex] = false; // Marcar la fila como no editada
     const nombreToUpdate = { nombre: almacene.nombre };
-    // Se llama al servicio para actualizar el almacén en el servidor
-    this.almaceneService.updateAlmacene(almacene.id, nombreToUpdate).subscribe(
-      () => {
-        // Si la actualización es exitosa, se recarga la lista de almacenes
-        this.loadAlmacenes();
-        // Se muestra un mensaje de éxito al usuario
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Éxito',
-          detail: 'Almacén actualizado correctamente.',
-        });
-      },
-      (error) => {
-        // En caso de error, se muestra un mensaje de error en la consola y en la interfaz de usuario
-        console.error('Error al actualizar almacén:', error);
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail:
-            'Error al actualizar almacén. Consulta la consola para más detalles.',
-        });
-      }
-    );
+    // Llamar al servicio para actualizar el almacén en el servidor
+    this.almaceneService
+      .updateAlmacene(almacene.id, nombreToUpdate)
+      .subscribe(
+        () => {
+          this.loadAlmacenes(); // Recargar la lista después de la actualización
+          // Mensaje de éxito al usuario
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Éxito',
+            detail: 'Almacén actualizado correctamente.',
+          });
+        },
+        (error) => {
+          console.error('Error al actualizar almacén:', error);
+          // Mensaje de error al usuario
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail:
+              'Error al actualizar almacén. Consulta la consola para más detalles.',
+          });
+        }
+      );
   }
 
+  // Método para cancelar la edición de una fila
   cancelRow(rowIndex: number): void {
-    this.editingRows[rowIndex] = false;
+    this.editingRows[rowIndex] = false; // Marcar la fila como no editada
   }
 
+  // Método para eliminar un almacén con confirmación del usuario
   deleteAlmacene(id: number): void {
     this.confirmationService.confirm({
       header: 'Confirma para eliminar',
@@ -142,7 +138,8 @@ export class AlmacenesComponent implements OnInit {
       rejectLabel: 'Cancelar',
       accept: () => {
         this.almaceneService.deleteAlmacene(id).subscribe(() => {
-          this.loadAlmacenes();
+          this.loadAlmacenes(); // Recargar la lista después de la eliminación
+          // Mensaje de éxito al usuario
           this.messageService.add({
             severity: 'success',
             summary: 'Éxito',
@@ -153,7 +150,20 @@ export class AlmacenesComponent implements OnInit {
     });
   }
 
+  // Método para mostrar el formulario de agregar un nuevo almacén
   showAddForm(): void {
     this.showAddFormFlag = true;
+  }
+
+  // Método para aplicar el filtro de búsqueda
+  applyFilter(): void {
+    this.filteredAlmacenes = this.filterData(this.searchText);
+  }
+
+  // Método privado para filtrar los almacenes según el texto de búsqueda
+  private filterData(filterText: string): Almacene[] {
+    return this.almacenes.filter((almacene) =>
+      almacene.nombre.toLowerCase().includes(filterText.toLowerCase())
+    );
   }
 }

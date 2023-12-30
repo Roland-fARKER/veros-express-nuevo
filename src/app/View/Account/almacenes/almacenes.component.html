@@ -4,28 +4,27 @@
   <p-toast></p-toast>
 
   <div class="sbar">
-   
+
     <div class="form-group">
       <div class="p-inputgroup">
         <span class="p-inputgroup-addon">
           <i class="pi pi-search"></i>
         </span>
-        <input id="searchInput"  [(ngModel)]="searchText" pInputText type="text" placeholder="buscar" (input)="applyFilter()" />
+        <input id="searchInput" [(ngModel)]="searchText" pInputText type="text" placeholder="buscar"
+          (input)="applyFilter()" />
       </div>
     </div>
     <div class="mt-3">
-      <button pButton type="button" icon="pi pi-plus" (click)="showAddForm()" class="p-button-success">Agregar Almacén</button>
+      <button pButton type="button" icon="pi pi-plus" (click)="showAddForm()" class="p-button-success">Agregar
+        Almacén</button>
     </div>
   </div>
 
-  
 
-  <p-table [paginator]="true"
-           [rows]="5"
-           [showCurrentPageReport]="true"
-           [tableStyle]="{ 'min-width': '50rem' }"
-           currentPageReportTemplate="Mostrando de {first} a {last} de {totalRecords} entidades"
-           [rowsPerPageOptions]="[5, 10, 20]" [value]="filteredAlmacenes" dataKey="id" editMode="row">
+
+  <p-table [paginator]="true" [rows]="5" [showCurrentPageReport]="true" [tableStyle]="{ 'min-width': '50rem' }"
+    currentPageReportTemplate="Mostrando de {first} a {last} de {totalRecords} entidades"
+    [rowsPerPageOptions]="[5, 10, 20]"  [value]="filteredAlmacenes" dataKey="id" editMode="row">
 
     <ng-template pTemplate="header">
       <tr>
@@ -50,23 +49,29 @@
         </td>
         <td>
           <div class="flex align-items-center justify-content-center gap-2">
-            <button *ngIf="!isRowEditing(ri)" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil" (click)="editRow(ri)" class="p-button-rounded p-button-text"></button>
-            <button *ngIf="isRowEditing(ri)" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check" (click)="saveRow(almacene, ri)" class="p-button-rounded p-button-text p-button-success mr-2"></button>
-            <button *ngIf="isRowEditing(ri)" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times" (click)="cancelRow(ri)" class="p-button-rounded p-button-text p-button-danger"></button>
-            <button pButton pRipple type="button" icon="pi pi-trash" class="p-button-rounded p-button-text" (click)="deleteAlmacene(almacene.id)"  class="p-button-rounded p-button-text p-button-danger"></button>
+            <button *ngIf="!isRowEditing(ri)" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
+              (click)="editRow(ri)" class="p-button-rounded p-button-text"></button>
+            <button *ngIf="isRowEditing(ri)" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check"
+              (click)="saveRow(almacene, ri)" class="p-button-rounded p-button-text p-button-success mr-2"></button>
+            <button *ngIf="isRowEditing(ri)" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times"
+              (click)="cancelRow(ri)" class="p-button-rounded p-button-text p-button-danger"></button>
+            <button pButton pRipple type="button" icon="pi pi-trash" class="p-button-rounded p-button-text"
+              (click)="deleteAlmacene(almacene.id)" class="p-button-rounded p-button-text p-button-danger"></button>
           </div>
         </td>
       </tr>
     </ng-template>
   </p-table>
 
-  <p-dialog header="Agregar un nuevo almacen" [modal]="true" [responsive]="true" [(visible)]="showAddFormFlag" [style]="{width: '40vw'}">
+  <p-dialog header="Agregar un nuevo almacen" [modal]="true" [responsive]="true" [(visible)]="showAddFormFlag"
+    [style]="{width: '40vw'}">
     <div class="form-group">
       <div class="p-inputgroup">
         <span class="p-inputgroup-addon">
           <i class="pi pi-pencil"></i>
         </span>
-        <input id="nombrer" name="nombre" [(ngModel)]="newAlmacene.nombre" required pInputText type="text" placeholder="Nombre" />
+        <input id="nombrer" name="nombre" [(ngModel)]="newAlmacene.nombre" required pInputText type="text"
+          placeholder="Nombre" />
       </div>
     </div>
     <button pButton type="button" icon="pi pi-check" (click)="addAlmacene()" class="p-button-success">Confirmar</button>

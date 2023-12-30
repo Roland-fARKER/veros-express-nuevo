@@ -1,123 +1,146 @@
+// proveedores.component.ts
+
 import { Component, OnInit } from '@angular/core';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { Proveedor } from 'src/app/Models/proveedor.model';
-import { ProveedoresService } from 'src/app/Services/proveedores.service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ProveedorService } from 'src/app/Services/proveedores.service';
+
+interface Proveedor {
+  id: number;
+  nombre: string;
+  estado: boolean;
+  telefono: number;
+}
 
 @Component({
   selector: 'app-proveedores',
   templateUrl: './proveedores.component.html',
   styleUrls: ['./proveedores.component.css'],
-  providers: [MessageService, ConfirmationService],
+  providers: [ConfirmationService, MessageService],
 })
 export class ProveedoresComponent implements OnInit {
-  proveedorForm: FormGroup;
-  proveedores: any[] = [];
-  selectedProveedor: any = {};
-  displayDialog: boolean = false;
+  proveedores: Proveedor[] = [];
+  newProveedor: Proveedor = { id: 0, nombre: '', estado: false, telefono: 0 };
+  editingRows: { [key: number]: boolean } = {};
+  showAddFormFlag = false;
+  filteredProveedores: Proveedor[] = [];
+  searchText: string = '';
 
   constructor(
-    private fb: FormBuilder,
-    private proveedoresService: ProveedoresService,
+    private proveedorService: ProveedorService,
     private confirmationService: ConfirmationService,
     private messageService: MessageService
-  ) {
-    this.proveedorForm = this.fb.group({
-      nombre: ['', [Validators.required]],
-      estado: [false, [Validators.required]],
-      telefono: [null, [Validators.required]],
-    });
-  }
+  ) {}
 
   ngOnInit(): void {
     this.loadProveedores();
   }
 
   loadProveedores(): void {
-    this.proveedoresService.getAllProveedores().subscribe((data) => {
-      this.proveedores = data;
+    this.proveedorService.getAllProveedores().subscribe((proveedores) => {
+      this.proveedores = proveedores;
+      this.applyFilter();
     });
   }
 
-  showDialogToAdd(): void {
-    this.selectedProveedor = {
-      nombre: '',
-      estado: true,
-      telefono: null,
-    };
-    this.proveedorForm.reset();
-    this.displayDialog = true;
+  addProveedor(): void {
+    this.proveedorService.addProveedor(this.newProveedor).subscribe(
+      () => {
+        this.loadProveedores();
+        this.newProveedor = { id: 0, nombre: '', estado: false, telefono: 0 };
+        this.showAddFormFlag = false;
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Éxito',
+          detail: 'Proveedor agregado correctamente.',
+        });
+      },
+      (error) => {
+        console.error('Error al agregar proveedor:', error);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail:
+            'Error al agregar proveedor. Consulta la consola para más detalles.',
+        });
+      }
+    );
   }
 
-  editProveedor(proveedor: any): void {
-    this.selectedProveedor = { ...proveedor };
-
-    // Asigna los valores del proveedor al formulario
-    this.proveedorForm.setValue({
-      nombre: this.selectedProveedor.nombre,
-      estado: this.selectedProveedor.estado,
-      telefono: this.selectedProveedor.telefono,
-    });
-
-    this.displayDialog = true;
+  cancelAdd(): void {
+    this.showAddFormFlag = false;
+    this.newProveedor = { id: 0, nombre: '', estado: false, telefono: 0 };
   }
 
-  save(): void {
-    const isNew = !this.selectedProveedor.id;
-    const operation = isNew ? 'addProveedor' : 'updateProveedor';
-  
-    this.proveedoresService[operation](isNew ? null : this.selectedProveedor.id, this.selectedProveedor)
-      .subscribe(
-        () => this.handleSuccess(isNew),
-        (error) => this.handleError(error)
-      );
+  isRowEditing(rowIndex: number): boolean {
+    return this.editingRows[rowIndex];
   }
-  
-  private handleSuccess(isNew: boolean): void {
-    this.loadProveedores();
-    this.displayDialog = false;
-    const message = isNew ? 'Proveedor agregado' : 'Proveedor actualizado';
-    this.showMessage('success', 'Éxito', message);
+
+  editRow(rowIndex: number): void {
+    Object.keys(this.editingRows).forEach(
+      (key: any) => (this.editingRows[key] = false)
+    );
+    this.editingRows[rowIndex] = true;
+    this.newProveedor = { ...this.proveedores[rowIndex] };
   }
-  
-  private handleError(error: any): void {
-    console.error(error);
-    this.showMessage('error', 'Error', 'Error al guardar el proveedor');
+
+  saveRow(proveedor: Proveedor, rowIndex: number): void {
+    this.editingRows[rowIndex] = false;
+    this.proveedorService.updateProveedor(proveedor.id, proveedor).subscribe(
+      () => {
+        this.loadProveedores();
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Éxito',
+          detail: 'Proveedor actualizado correctamente.',
+        });
+      },
+      (error) => {
+        console.error('Error al actualizar proveedor:', error);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail:
+            'Error al actualizar proveedor. Consulta la consola para más detalles.',
+        });
+      }
+    );
   }
-  
-  private showMessage(severity: string, summary: string, detail: string): void {
-    this.messageService.add({ severity, summary, detail });
+
+  cancelRow(rowIndex: number): void {
+    this.editingRows[rowIndex] = false;
   }
-  
 
   deleteProveedor(id: number): void {
     this.confirmationService.confirm({
-      message: '¿Estás seguro de que quieres eliminar este proveedor?',
+      header: 'Confirma para eliminar',
+      message: '¿Estás seguro de que deseas eliminar este proveedor?',
+      icon: 'pi pi-trash',
+      acceptLabel: 'Eliminar',
+      rejectLabel: 'Cancelar',
       accept: () => {
-        this.proveedoresService.deleteProveedor(id).subscribe(
-          (data) => {
-            this.loadProveedores();
-            this.displayDialog = false;
-            this.messageService.add({
-              severity: 'success',
-              summary: 'Éxito',
-              detail: 'Proveedor eliminado',
-            });
-          },
-          (error) => {
-            console.error(error);
-            this.messageService.add({
-              severity: 'error',
-              summary: 'Error',
-              detail: 'Error al eliminar el proveedor',
-            });
-          }
-        );
+        this.proveedorService.deleteProveedor(id).subscribe(() => {
+          this.loadProveedores();
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Éxito',
+            detail: 'Proveedor eliminado correctamente.',
+          });
+        });
       },
     });
   }
 
-  closeDialog(): void {
-    this.displayDialog = false;
+  showAddForm(): void {
+    this.showAddFormFlag = true;
+  }
+
+  applyFilter(): void {
+    this.filteredProveedores = this.filterData(this.searchText);
+  }
+
+  private filterData(filterText: string): Proveedor[] {
+    return this.proveedores.filter((proveedor) =>
+      proveedor.nombre.toLowerCase().includes(filterText.toLowerCase())
+    );
   }
 }

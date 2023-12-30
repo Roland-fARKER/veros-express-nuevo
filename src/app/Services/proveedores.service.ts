@@ -1,35 +1,50 @@
-// proveedores.service.ts
+// proveedor.service.ts
 
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Proveedor } from '../Models/proveedor.model';
+
+export interface Proveedor {
+  id: number;
+  nombre: string;
+  telefono: number;
+  estado: boolean;
+}
 
 @Injectable({
   providedIn: 'root',
 })
-export class ProveedoresService {
-  private apiUrl = 'http://localhost:3000/verosApi/v1/proveedores';
-  private crear =  'http://localhost:3000/verosApi/v1/proveedores/Enviar';
+export class ProveedorService {
+  private apiUrl = 'http://localhost:3000/verosApi/v1/proveedores'; // Reemplaza con la URL correcta
+
   constructor(private http: HttpClient) {}
 
   getAllProveedores(): Observable<Proveedor[]> {
-    return this.http.get<Proveedor[]>(`${this.apiUrl}/obtener`);
+    return this.http.get<Proveedor[]>(this.apiUrl + '/obtener');
   }
 
-  getProveedorById(id: number): Observable<Proveedor> {
-    return this.http.get<Proveedor>(`${this.apiUrl}/Obtener/${id}`);
+  addProveedor(proveedor: Proveedor): Observable<Proveedor> {
+    // Elimina el ID antes de enviar la solicitud al backend
+    const { id, ...proveedorWithoutId } = proveedor;
+  
+    // Convertir el campo "telefono" a tipo number
+    proveedorWithoutId.telefono = Number(proveedorWithoutId.telefono);
+  
+    // Agrega la palabra "Agregar" a la URL
+    const apiUrlWithAction = `${this.apiUrl}/Enviar`;
+    console.log(proveedorWithoutId);
+    return this.http.post<Proveedor>(apiUrlWithAction, proveedorWithoutId);
+  }
+  
+  updateProveedor(id: number, proveedor: Proveedor): Observable<Proveedor> {
+    const { id: proveedorId, ...proveedorWithoutId } = proveedor;
+    const url = `${this.apiUrl}/Actualizar/${id}`;
+    console.log(proveedorWithoutId);
+    return this.http.patch<Proveedor>(url, proveedorWithoutId);
   }
 
-  addProveedor(proveedor: Proveedor): Observable<any> {
-    return this.http.post<any>(this.crear, proveedor);
-  }
-
-  updateProveedor(id: number, proveedor: Proveedor): Observable<any> {
-    return this.http.patch<any>(`${this.apiUrl}/Actualizar/${id}`, proveedor);
-  }
-
-  deleteProveedor(id: number): Observable<any> {
-    return this.http.delete<any>(`${this.apiUrl}/Delete/${id}`);
+  deleteProveedor(id: number): Observable<void> {
+    const url = `${this.apiUrl}/Delete/${id}`;
+    return this.http.delete<void>(url);
   }
 }

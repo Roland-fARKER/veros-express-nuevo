@@ -2,7 +2,7 @@ import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 //Modulo de Rutas
 import { AppRoutingModule } from './app-routing.module';
-
+import { TagModule } from 'primeng/tag';
 //Modulos
 import { SharedModule } from './View/Shared/shared.module';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -70,6 +70,7 @@ import { AlmacenesComponent } from './View/Account/almacenes/almacenes.component
     DialogModule,
     ConfirmDialogModule,
     InputNumberModule,
+    TagModule
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA

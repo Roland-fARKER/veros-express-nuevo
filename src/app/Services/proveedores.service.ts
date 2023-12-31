@@ -38,6 +38,8 @@ export class ProveedorService {
   
   updateProveedor(id: number, proveedor: Proveedor): Observable<Proveedor> {
     const { id: proveedorId, ...proveedorWithoutId } = proveedor;
+
+    proveedorWithoutId.telefono = Number(proveedorWithoutId.telefono);
     const url = `${this.apiUrl}/Actualizar/${id}`;
     console.log(proveedorWithoutId);
     return this.http.patch<Proveedor>(url, proveedorWithoutId);

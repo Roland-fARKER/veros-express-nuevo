@@ -1,5 +1,4 @@
 // proveedor.service.ts
-
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -15,7 +14,7 @@ export interface Proveedor {
   providedIn: 'root',
 })
 export class ProveedorService {
-  private apiUrl = 'http://localhost:3000/verosApi/v1/proveedores'; // Reemplaza con la URL correcta
+  private apiUrl = 'http://localhost:3000/verosApi/v1/proveedores'; 
 
   constructor(private http: HttpClient) {}
 

@@ -23,14 +23,16 @@ export class ProveedorService {
   }
 
   addProveedor(proveedor: Proveedor): Observable<Proveedor> {
+
+    // Agrega la palabra "Agregar" a la URL
+    const apiUrlWithAction = `${this.apiUrl}/Enviar`;
+
     // Elimina el ID antes de enviar la solicitud al backend
     const { id, ...proveedorWithoutId } = proveedor;
   
     // Convertir el campo "telefono" a tipo number
     proveedorWithoutId.telefono = Number(proveedorWithoutId.telefono);
   
-    // Agrega la palabra "Agregar" a la URL
-    const apiUrlWithAction = `${this.apiUrl}/Enviar`;
     console.log(proveedorWithoutId);
     return this.http.post<Proveedor>(apiUrlWithAction, proveedorWithoutId);
   }

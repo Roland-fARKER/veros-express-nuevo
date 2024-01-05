@@ -3,42 +3,44 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, catchError } from 'rxjs';
 
+export interface Familia {
+  id: number;
+  Nombre_familia: string;
+}
+
 @Injectable({
   providedIn: 'root',
 })
 export class FamiliaService {
-  private obtener = 'http://localhost:3000/verosApi/v1/familias/Obtener';
-  private crear = 'http://localhost:3000/verosApi/v1/familias/Enviar';
-  private actualizar = 'http://localhost:3000/verosApi/v1/familias/Actualizar';
-  private eliminar = 'http://localhost:3000/verosApi/v1/familias/Delete';
+  private apiUrl = 'http://localhost:3000/verosApi/v1/familias';
 
   constructor(private http: HttpClient) {}
 
-  getAllFamilias(): Observable<any[]> {
-    return this.http.get<any[]>(this.obtener);
+  getAllFamilias(): Observable<Familia[]> {
+    return this.http.get<Familia[]>(this.apiUrl + '/Obtener');
   }
 
-  getFamiliaById(id: number): Observable<any> {
-    return this.http.get<any>(`${this.obtener}/${id}`);
+  addFamilia(Nombre_familia: string): Observable<void> {
+    //recibe el string que se le manda y lo encapsula
+    const nuevoFamilia = { Nombre_familia: Nombre_familia };
+    //li imprime para verificar este bein la encapsulación
+    console.log(nuevoFamilia)
+    //envía una petición post a la url del API con el objeto que contiene el nombre
+    return this.http.post<void>(`${this.apiUrl}/Enviar`, nuevoFamilia);
   }
 
-  addFamilia(familia: any): Observable<any> {
-    return this.http.post<any>(this.crear, familia).pipe(
-      catchError((error: HttpErrorResponse) => {
-        console.error('Error al agregar familia:', error);
-        if (error.error && error.error.message) {
-          console.error('Mensaje de error del servidor:', error.error.message);
-        }
-        throw error; // Reenviar el error para que se maneje en el componente
-      })
+  updateFamilia(id: number, familiaData: { Nombre_familia: string }): Observable<void> {
+    //obtiene el id y los datos a actualizar y los imprime 
+    console.log(familiaData);
+    //se envia la petición
+    return this.http.patch<void>(
+      `${this.apiUrl}/Actualizar/${id}`,
+      familiaData
     );
   }
 
-  updateFamilia(id: number, familia: any): Observable<any> {
-    return this.http.put<any>(`${this.actualizar}/${id}`, familia);
-  }
-
-  deleteFamilia(id: number): Observable<any> {
-    return this.http.delete<any>(`${this.eliminar}/${id}`);
+  deleteFamilia(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/Delete/${id}`);
   }
 }
+

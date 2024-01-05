@@ -1,42 +1,80 @@
 <!-- familia.component.html -->
-<p-toast></p-toast>
-<p-table [value]="familias" selectionMode="single" (onRowSelect)="onRowSelect($event)" [(selection)]="selectedFamilia">
-  <ng-template pTemplate="header">
-    <tr>
-      <th>Id</th>
-      <th>Nombre</th>
-      <th>Acciones</th>
-    </tr>
-  </ng-template>
-  <ng-template pTemplate="body" let-familia>
-    <tr>
-      <td>{{ familia.id }}</td>
-      <td>{{ familia.Nombre_familia }}</td>
-      <td>
-        <p-button severity="success" icon="pi pi-pencil" (click)="onRowSelect({ data: familia })"></p-button>
+<div class="card">
+  <p-confirmDialog></p-confirmDialog>
+  <p-toast></p-toast>
 
-        <p-button severity="danger" icon="pi pi-trash" (click)="delete(familia)"></p-button>
-      </td>
-    </tr>
-  </ng-template>
-</p-table>
+  <div class="sbar">
 
-<p-dialog [(visible)]="displayDialog" [modal]="true" [responsive]="true" [style]="{ width: '400px' }">
-  <div *ngIf="displayDialog">
-    <h3>{{ selectedFamilia.id ? 'Editar' : 'Agregar' }} Familia</h3>
-    <form>
-      <p-inputGroup>
-        <p-inputGroupAddon>
-          <i class="pi pi-user"></i>
-        </p-inputGroupAddon>
-        <input pInputText placeholder="Nombre" id="nombre" name="nombre" [(ngModel)]="selectedFamilia.Nombre_familia" />
-      </p-inputGroup>
-    </form>
-    <div class="ui-dialog-buttonpane p-clearfix">
-      <button pButton icon="pi pi-check" (click)="save()"></button>
-      <button pButton icon="pi pi-times" (click)="displayDialog = false"></button>
+    <div class="form-group">
+      <div class="p-inputgroup">
+        <span class="p-inputgroup-addon">
+          <i class="pi pi-search"></i>
+        </span>
+        <input id="searchInput" [(ngModel)]="searchText" pInputText type="text" placeholder="buscar"
+          (input)="applyFilter()" />
+      </div>
+    </div>
+    <div class="mt-3">
+      <button pButton type="button" icon="pi pi-plus" (click)="showAddForm()" class="p-button-success">Agregar
+        Familia</button>
     </div>
   </div>
-</p-dialog>
-<p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog>
-<button pButton label="Agregar Familia" icon="pi pi-plus" (click)="showDialogToAdd()"></button>
+
+
+
+  <p-table [paginator]="true" [rows]="5" [showCurrentPageReport]="true" [tableStyle]="{ 'min-width': '50rem' }"
+    currentPageReportTemplate="Mostrando de {first} a {last} de {totalRecords} Familia"
+    [rowsPerPageOptions]="[5, 10, 20]"  [value]="filteredFamilia" dataKey="id" editMode="row">
+
+    <ng-template pTemplate="header">
+      <tr>
+        <th style="width:20%">ID</th>
+        <th style="width:20%">Nombre Familias</th>
+        <th style="width:20%">Acciones</th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-familia let-ri="rowIndex">
+      <tr [pEditableRow]="familia">
+        <td>{{ familia.id }}</td>
+        <td>
+          <p-cellEditor>
+            <ng-template pTemplate="input">
+              <input pInputText type="text" [(ngModel)]="familia.Nombre_familia" required>
+            </ng-template>
+            <ng-template pTemplate="output">
+              {{ familia.Nombre_familia }}
+            </ng-template>
+          </p-cellEditor>
+        </td>
+        <td>
+          <div class="flex align-items-center justify-content-center gap-2">
+            <button *ngIf="!isRowEditing(ri)" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
+              (click)="editRow(ri)" class="p-button-rounded p-button-text"></button>
+            <button *ngIf="isRowEditing(ri)" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check"
+              (click)="saveRow(familia, ri)" class="p-button-rounded p-button-text p-button-success mr-2"></button>
+            <button *ngIf="isRowEditing(ri)" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times"
+              (click)="cancelRow(ri)" class="p-button-rounded p-button-text p-button-danger"></button>
+            <button pButton pRipple type="button" icon="pi pi-trash" class="p-button-rounded p-button-text"
+              (click)="deleteFamilia(familia.id)" class="p-button-rounded p-button-text p-button-danger"></button>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+
+  <p-dialog header="Agregar una nueva familia" [modal]="true" [responsive]="true" [(visible)]="showAddFormFlag"
+    [style]="{width: '40vw'}">
+    <div class="form-group">
+      <div class="p-inputgroup">
+        <span class="p-inputgroup-addon">
+          <i class="pi pi-pencil"></i>
+        </span>
+        <input id_categoria="id_categoria" Nombre_Categoria="Nombre_familia" [(ngModel)]="newFamilia.Nombre_familia" required pInputText type="text"
+          placeholder="Nombre" />
+      </div>
+    </div>
+    <button pButton type="button" icon="pi pi-check" (click)="addFamilia()" class="p-button-success">Confirmar</button>
+    <button pButton type="button" icon="pi pi-times" (click)="cancelAdd()" class="p-button-danger">Cancelar</button>
+  </p-dialog>
+</div>

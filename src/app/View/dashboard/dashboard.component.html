@@ -4,41 +4,48 @@
     <!-- <div class="bann">
         <li><a routerLink="/Home"><i class="pi pi-home" style="font-size: 1.5rem"></i> volver al inicio</a></li>
       </div> -->
-      
-      <div>
-        <img src="./../../../assets/img/logo.png" class="logo"/>
-        <h4>User Name</h4>
-      </div>
-      
-      <ul>
-        <li>
-          <a routerLinkActive="active">
-            <i class="pi pi-user" style="font-size: 1.5rem"></i>
-             Catálogo
-          </a>
-        </li>
-        <li>
-          <a routerLink="/Dashboard/Proveedores"  routerLinkActive="active">
-            <i class="pi pi-truck" style="font-size: 1.5rem"></i> 
-            Proveedores
-          </a>
-        </li>
-        <li>
-          <a routerLink="/Dashboard/Almacenes" routerLinkActive="active">
-            <i class="pi pi-building" style="font-size: 1.5rem"></i> 
-            Almacenes
-          </a>
-        </li>
-        <li><a href="#"><i class="pi pi-tags" style="font-size: 1.5rem"></i> Categorias</a></li>
-        <li><a routerLink="/Dashboard/Familias" routerLinkActive="active" ><i class="pi pi-sitemap" style="font-size: 1.5rem"></i> Familias</a></li>
-        <li><a routerLink="/Dashboard/RegistrarUsuarios" routerLinkActive="active"><i class="pi pi-users" style="font-size: 1.5rem"></i> Registrar usuarios</a></li>
-      
-      </ul>
-      <button pButton type="button" icon="pi pi-sign-out" label="Cerrar sesión" (click)="cerrar()"></button>
-    </nav>
-    <main class="content">
-      <!-- Contenido principal de la página -->
-      <router-outlet />
-    </main>
-  </div>
 
+    <div>
+      <img src="./../../../assets/img/logo.png" class="logo" />
+      <h4>User Name</h4>
+    </div>
+
+    <ul>
+      <li>
+        <a routerLinkActive="active">
+          <i class="pi pi-user" style="font-size: 1.5rem"></i>
+          Catálogo
+        </a>
+      </li>
+      <li>
+        <a routerLink="/Dashboard/Proveedores" routerLinkActive="active">
+          <i class="pi pi-truck" style="font-size: 1.5rem"></i>
+          Proveedores
+        </a>
+      </li>
+      <li>
+        <a routerLink="/Dashboard/Almacenes" routerLinkActive="active">
+          <i class="pi pi-building" style="font-size: 1.5rem"></i>
+          Almacenes
+        </a>
+      </li>
+      <a routerLink="/Dashboard/Categorias" routerLinkActive="active">
+        <i class="pi pi-tags" style="font-size: 1.5rem"></i>
+        Categorias
+      </a>
+      <li>
+        <a routerLink="/Dashboard/Familias" routerLinkActive="active">
+          <i class="pi pi-sitemap" style="font-size: 1.5rem"></i>
+          Familias
+        </a>
+      <li><a routerLink="/Dashboard/RegistrarUsuarios" routerLinkActive="active"><i class="pi pi-users"
+            style="font-size: 1.5rem"></i> Registrar usuarios</a></li>
+
+    </ul>
+    <button pButton type="button" icon="pi pi-sign-out" label="Cerrar sesión" (click)="cerrar()"></button>
+  </nav>
+  <main class="content">
+    <!-- Contenido principal de la página -->
+    <router-outlet />
+  </main>
+</div>

@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 interface Almacene {
   id: number;
   nombre: string;
+  
 }
 
 @Injectable({

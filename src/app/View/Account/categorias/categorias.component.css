@@ -1,3 +1,28 @@
 :host ::ng-deep .p-button {
     margin: 5px;
 }
+
+.sbar{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding: 10px 15px;
+}
+
+:host ::ng-deep .p-datatable .p-datatable-tbody > tr > td {
+    text-align: left;
+    border: 1px solid #dee2e6;
+    border-width: 0 0 1px 0;
+    padding: 10px 10px;
+}
+
+:host ::ng-deep .p-datatable .p-datatable-thead > tr > th {
+    text-align: left;
+    padding: 1rem 1rem;
+    border: 1px solid #dee2e6;
+    border-width: 0 0 1px 0;
+    font-weight: 700;
+    color: white;
+    background: #018BD3;
+    transition: box-shadow 0.2s;
+}

@@ -11,6 +11,7 @@ import { FamiliasComponent } from './View/Account/familias/familias.component';
 import { ProveedoresComponent } from './View/Account/proveedores/proveedores.component';
 import { CategoriasComponent } from './View/Account/categorias/categorias.component';
 import { AlmacenesComponent } from './View/Account/almacenes/almacenes.component';
+import { ProductosComponent } from './View/Account/productos/productos.component';
 //Guards
 import { AuthenticationGuard } from './Guards/authentication.guard';
 
@@ -37,6 +38,11 @@ const routes: Routes = [
       {
         path: 'Proveedores',
         component: ProveedoresComponent,
+        canActivate: [AuthenticationGuard],
+      },
+      {
+        path: 'Productos',
+        component: ProductosComponent,
         canActivate: [AuthenticationGuard],
       },
       {

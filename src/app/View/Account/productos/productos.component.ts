@@ -1,7 +1,13 @@
 // productos.component.ts
 import { Component, OnInit } from '@angular/core';
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { FormControl, FormGroup } from '@angular/forms';
 import { ProductosService } from 'src/app/Services/productos.service';
+import { CategoriasService } from 'src/app/Services/categorias.service';
+import { FamiliaService } from 'src/app/Services/famila.service';
+import { ProveedorService } from 'src/app/Services/proveedores.service';
+
+
 
 export interface Productos {
   id_producto: number;
@@ -12,6 +18,25 @@ export interface Productos {
   Precio_venta: number;
   Precio_Unitario: number;
 }
+
+export interface Categorias {
+  id_categoria: number;
+  Nombre_Categoria: string;
+}
+
+
+export interface Familia {
+  id: number;
+  Nombre_familia: string;
+}
+
+export interface Proveedor {
+  id: number;
+  nombre: string;
+  estado: boolean;
+  telefono: number;
+}
+
 
 @Component({
   selector: 'app-productos',
@@ -26,16 +51,63 @@ export class ProductosComponent implements OnInit {
   showAddFormFlag = false;
   filteredProductos: Productos[] = [];
   searchText: string = '';
+  formGroup: FormGroup | any;
+  formGroup1: FormGroup | any;
+  formGroup2: FormGroup | any;
+  categorias: Categorias[] = [];
+  familia: Familia[] = [];
+  proveedores: Proveedor[] = [];
+
 
   constructor(
     private productosService: ProductosService,
+    private categoriasService: CategoriasService,
+    private familiaService: FamiliaService,
+    private proveedorService: ProveedorService,
     private confirmationService: ConfirmationService,
     private messageService: MessageService
   ) {}
 
   ngOnInit(): void {
     this.loadProductos();
+    this.loadCategorias();
+    this.loadFamilias();
+    this.loadProveedores();
+    this.formGroup = new FormGroup({
+      selectedCategorias: new FormControl<Categorias | null>(null)
+    });
+
+    this.formGroup1 = new FormGroup({
+      selectedFamilias: new FormControl<Familia | null>(null)
+    });
+
+    this.formGroup2 = new FormGroup({
+      selectedProveedores: new FormControl<Proveedor | null>(null)
+    });
+
   }
+
+  loadCategorias(): void {
+    this.categoriasService.getAllCategorias().subscribe((categorias) => {
+      this.categorias = categorias; // Asignar la lista completa
+      console.log(categorias);
+    });
+  }
+
+  loadFamilias(): void {
+    this.familiaService.getAllFamilias().subscribe((familia) => {
+      this.familia = familia; // Asignar la lista completa
+      console.log(familia); 
+    });
+  }
+
+  loadProveedores(): void {
+    this.proveedorService.getAllProveedores().subscribe((proveedores) => {
+      this.proveedores = proveedores;
+      console.log(proveedores);
+    });
+  }
+
 
   loadProductos(): void {
     this.productosService.getAllProductos().subscribe((productos) => {

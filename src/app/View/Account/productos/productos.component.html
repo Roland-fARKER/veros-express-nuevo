@@ -166,6 +166,30 @@
         </div>
       </div>
       <!-- Fin -->
+      <!--Inicio Dropdown Categoria-->
+      <div class="card flex justify-content-center">
+        <form [formGroup]="formGroup">
+          <p-dropdown formControlName="selectedCategorias" [options]="categorias" optionLabel="Nombre_Categoria"
+            placeholder="Seleccione una categoria"></p-dropdown>
+        </form>
+      </div>
+      <!--Fin-->
+      <!--Inicio Dropdown Familia-->
+      <div class="card flex justify-content-center">
+        <form [formGroup]="formGroup1">
+          <p-dropdown formControlName="selectedFamilias" [options]="familia" optionLabel="Nombre_familia"
+            placeholder="Seleccione una Familia"></p-dropdown>
+        </form>
+      </div>
+      <!--Fin-->
+      <!--Inicio Dropdown Proveedores-->
+      <div class="card flex justify-content-center">
+        <form [formGroup]="formGroup2">
+          <p-dropdown formControlName="selectedProveedores" [options]="proveedores" optionLabel="nombre"
+            placeholder="Seleccione los Proveedores"></p-dropdown>
+        </form>
+      </div>
+      <!--Fin-->
       <!-- Inicio Precio Compra -->
       <div class="form-group">
         <div class="p-inputgroup">

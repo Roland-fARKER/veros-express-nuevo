@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
+
 export interface Productos {
   id_producto: number;
   Nombre_Producto: string;
@@ -11,9 +12,6 @@ export interface Productos {
   Precio_Compra: number;
   Precio_venta: number;
   Precio_Unitario: number;
-  // Id_Categoria: number;
-  // Id_Familia: number;
-  // Id_Proveedor: number;
 }
 
 @Injectable({
@@ -43,6 +41,7 @@ export class ProductosService {
 
     // Convertir el campo "Precio_Unitario" a tipo number
     productosWithoutId.Precio_Unitario = Number(productosWithoutId.Precio_Unitario);
+
   
     // Agrega la palabra "Agregar" a la URL
     const apiUrlWithAction = `${this.apiUrl}/Enviar`;
@@ -67,3 +66,4 @@ export class ProductosService {
     return this.http.delete<void>(url);
   }
 }
+

@@ -23,6 +23,7 @@ import { DialogModule } from 'primeng/dialog';
 import { ConfirmationService } from 'primeng/api';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { TokenHttpInterceptor } from './Interceptors/token.interceptor';
+import { DropdownModule } from 'primeng/dropdown';
 
 
 //import { StatusHttpInterceptor } from './Interceptors/status.interceptor';
@@ -72,7 +73,8 @@ import { ProductosComponent } from './View/Account/productos/productos.component
     DialogModule,
     ConfirmDialogModule,
     InputNumberModule,
-    TagModule
+    TagModule,
+    DropdownModule
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA

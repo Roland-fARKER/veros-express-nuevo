@@ -13,10 +13,8 @@ export interface Productos {
   id_producto: number;
   Nombre_Producto: string;
   Descripcion: string;
-  Stock: number;
   Precio_Compra: number;
   Precio_venta: number;
-  Precio_Unitario: number;
 }
 
 export interface Categorias {
@@ -46,7 +44,7 @@ export interface Proveedor {
 })
 export class ProductosComponent implements OnInit {
   productos: Productos[] = [];
-  newProductos: Productos = { id_producto: 0, Nombre_Producto: '', Descripcion: '', Stock: 0, Precio_Compra: 0, Precio_venta: 0, Precio_Unitario: 0 };
+  newProductos: Productos = { id_producto: 0, Nombre_Producto: '', Descripcion: '', Precio_Compra: 0, Precio_venta: 0 };
   editingRows: { [key: number]: boolean } = {};
   showAddFormFlag = false;
   filteredProductos: Productos[] = [];
@@ -120,7 +118,7 @@ export class ProductosComponent implements OnInit {
     this.productosService.addProductos(this.newProductos).subscribe(
       () => {
         this.loadProductos();
-        this.newProductos = { id_producto: 0, Nombre_Producto: '', Descripcion: '', Stock: 0, Precio_Compra: 0, Precio_venta: 0, Precio_Unitario: 0 };
+        this.newProductos = { id_producto: 0, Nombre_Producto: '', Descripcion: '', Precio_Compra: 0, Precio_venta: 0 };
         this.showAddFormFlag = false;
         this.messageService.add({
           severity: 'success',
@@ -142,7 +140,7 @@ export class ProductosComponent implements OnInit {
 
   cancelAdd(): void {
     this.showAddFormFlag = false;
-    this.newProductos = { id_producto: 0, Nombre_Producto: '', Descripcion: '', Stock: 0, Precio_Compra: 0, Precio_venta: 0, Precio_Unitario: 0 };
+    this.newProductos = { id_producto: 0, Nombre_Producto: '', Descripcion: '', Precio_Compra: 0, Precio_venta: 0 };
   }
 
   isRowEditing(rowIndex: number): boolean {

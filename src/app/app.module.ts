@@ -24,6 +24,7 @@ import { ConfirmationService } from 'primeng/api';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { TokenHttpInterceptor } from './Interceptors/token.interceptor';
 import { DropdownModule } from 'primeng/dropdown';
+import { TabViewModule } from 'primeng/tabview';
 
 
 //import { StatusHttpInterceptor } from './Interceptors/status.interceptor';
@@ -41,6 +42,7 @@ import { ProveedoresComponent } from './View/Account/proveedores/proveedores.com
 import { CategoriasComponent } from './View/Account/categorias/categorias.component';
 import { AlmacenesComponent } from './View/Account/almacenes/almacenes.component';
 import { ProductosComponent } from './View/Account/productos/productos.component';
+import { CatalogoComponent } from './View/Account/catalogo/catalogo.component';
 
 @NgModule({
   declarations: [
@@ -54,6 +56,7 @@ import { ProductosComponent } from './View/Account/productos/productos.component
     CategoriasComponent,
     AlmacenesComponent,
     ProductosComponent,
+    CatalogoComponent,
   ],
   imports: [
     BrowserModule,
@@ -74,7 +77,8 @@ import { ProductosComponent } from './View/Account/productos/productos.component
     ConfirmDialogModule,
     InputNumberModule,
     TagModule,
-    DropdownModule
+    DropdownModule,
+    TabViewModule
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA

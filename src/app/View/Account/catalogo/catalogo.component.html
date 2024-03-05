@@ -1,0 +1,13 @@
+<div style="width: 100%; padding: 5px;">
+    <h2>Almacenes registrados</h2>
+    <p-tabView>
+        <ng-container *ngFor="let almacen of almacenes; let i = index">
+            <p-tabPanel [header]="almacen.nombre+ ' ' + almacen.id">
+                <h3>
+                    <!-- Contenido del tabPanel para cada almacén -->
+                    {{ almacen.nombre }}
+                </h3>
+            </p-tabPanel>
+        </ng-container>
+    </p-tabView>
+</div>

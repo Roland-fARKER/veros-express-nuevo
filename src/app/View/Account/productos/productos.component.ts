@@ -7,23 +7,21 @@ import { CategoriasService } from 'src/app/Services/categorias.service';
 import { FamiliaService } from 'src/app/Services/famila.service';
 import { ProveedorService } from 'src/app/Services/proveedores.service';
 
-
-
 export interface Productos {
   id_producto: number;
   Nombre_Producto: string;
   Descripcion: string;
-  Stock: number;
-  Precio_Compra: number;
-  Precio_venta: number;
-  Precio_Unitario: number;
+  Precio_Compra: number | undefined;
+  Precio_venta: number | undefined;
+  Id_Categoria: number;
+  Id_Familia: number;
+  Id_Proveedor: number;
 }
 
 export interface Categorias {
   id_categoria: number;
   Nombre_Categoria: string;
 }
-
 
 export interface Familia {
   id: number;
@@ -37,7 +35,6 @@ export interface Proveedor {
   telefono: number;
 }
 
-
 @Component({
   selector: 'app-productos',
   templateUrl: './productos.component.html',
@@ -46,18 +43,27 @@ export interface Proveedor {
 })
 export class ProductosComponent implements OnInit {
   productos: Productos[] = [];
-  newProductos: Productos = { id_producto: 0, Nombre_Producto: '', Descripcion: '', Stock: 0, Precio_Compra: 0, Precio_venta: 0, Precio_Unitario: 0 };
+  newProductos: Productos = {
+    id_producto: 0,
+    Nombre_Producto: '',
+    Descripcion: '',
+    Precio_Compra: undefined,
+    Precio_venta: undefined,
+    Id_Categoria: 0,
+    Id_Familia: 0,
+    Id_Proveedor: 0,
+  };
   editingRows: { [key: number]: boolean } = {};
   showAddFormFlag = false;
   filteredProductos: Productos[] = [];
   searchText: string = '';
-  formGroup: FormGroup | any;
-  formGroup1: FormGroup | any;
-  formGroup2: FormGroup | any;
-  categorias: Categorias[] = [];
-  familia: Familia[] = [];
-  proveedores: Proveedor[] = [];
 
+  categorias: Categorias[] = [];
+  categoriaselect: Categorias | undefined;
+  familia: Familia[] = [];
+  familiaSelect: Familia | undefined;
+  proveedores: Proveedor[] = [];
+  proveedorSelect: Proveedor | undefined;
 
   constructor(
     private productosService: ProductosService,
@@ -73,18 +79,6 @@ export class ProductosComponent implements OnInit {
     this.loadCategorias();
     this.loadFamilias();
     this.loadProveedores();
-    this.formGroup = new FormGroup({
-      selectedCategorias: new FormControl<Categorias | null>(null)
-    });
-
-    this.formGroup1 = new FormGroup({
-      selectedFamilias: new FormControl<Familia | null>(null)
-    });
-
-    this.formGroup2 = new FormGroup({
-      selectedProveedores: new FormControl<Proveedor | null>(null)
-    });
-
   }
 
   loadCategorias(): void {
@@ -97,7 +91,7 @@ export class ProductosComponent implements OnInit {
   loadFamilias(): void {
     this.familiaService.getAllFamilias().subscribe((familia) => {
       this.familia = familia; // Asignar la lista completa
-      console.log(familia); 
+      console.log(familia);
     });
   }
 
@@ -108,19 +102,32 @@ export class ProductosComponent implements OnInit {
     });
   }
 
-
   loadProductos(): void {
     this.productosService.getAllProductos().subscribe((productos) => {
       this.productos = productos;
       this.applyFilter();
+      console.log(productos);
     });
   }
 
   addProductos(): void {
+    // Obtener los valores seleccionados de los dropdowns
+    const categoriaId = this.categoriaselect?.id_categoria;
+    const familiaId = this.familiaSelect?.id;
+    const proveedorId = this.proveedorSelect?.id;
+
+    // Asignar los valores al objeto newProductos
+    this.newProductos.Id_Categoria =
+      categoriaId !== undefined ? categoriaId : 0;
+    this.newProductos.Id_Familia = familiaId !== undefined ? familiaId : 0;
+    this.newProductos.Id_Proveedor =
+      proveedorId !== undefined ? proveedorId : 0;
+
+    // Llamar al servicio para agregar productos
     this.productosService.addProductos(this.newProductos).subscribe(
       () => {
         this.loadProductos();
-        this.newProductos = { id_producto: 0, Nombre_Producto: '', Descripcion: '', Stock: 0, Precio_Compra: 0, Precio_venta: 0, Precio_Unitario: 0 };
+        this.resetForm();
         this.showAddFormFlag = false;
         this.messageService.add({
           severity: 'success',
@@ -142,7 +149,7 @@ export class ProductosComponent implements OnInit {
 
   cancelAdd(): void {
     this.showAddFormFlag = false;
-    this.newProductos = { id_producto: 0, Nombre_Producto: '', Descripcion: '', Stock: 0, Precio_Compra: 0, Precio_venta: 0, Precio_Unitario: 0 };
+    this.resetForm();
   }
 
   isRowEditing(rowIndex: number): boolean {
@@ -159,25 +166,27 @@ export class ProductosComponent implements OnInit {
 
   saveRow(productos: Productos, rowIndex: number): void {
     this.editingRows[rowIndex] = false;
-    this.productosService.updateProductos(productos.id_producto, productos).subscribe(
-      () => {
-        this.loadProductos();
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Éxito',
-          detail: 'Productos actualizado correctamente.',
-        });
-      },
-      (error) => {
-        console.error('Error al actualizar productos:', error);
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail:
-            'Error al actualizar productos. Consulta la consola para más detalles.',
-        });
-      }
-    );
+    this.productosService
+      .updateProductos(productos.id_producto, productos)
+      .subscribe(
+        () => {
+          this.loadProductos();
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Éxito',
+            detail: 'Productos actualizado correctamente.',
+          });
+        },
+        (error) => {
+          console.error('Error al actualizar productos:', error);
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail:
+              'Error al actualizar productos. Consulta la consola para más detalles.',
+          });
+        }
+      );
   }
 
   cancelRow(rowIndex: number): void {
@@ -217,5 +226,44 @@ export class ProductosComponent implements OnInit {
       producto.Nombre_Producto.toLowerCase().includes(filterText.toLowerCase())
     );
   }
-}
 
+  mapearCategoria(id:number) {
+    const categoria = this.categorias.find(categoria => categoria.id_categoria === id)
+    if (categoria) {
+      return categoria?.Nombre_Categoria;
+    } else {
+      return "NA";
+    }
+  }
+
+  mapearFamilia(id:number) {
+    const familia = this.familia.find(familia => familia.id === id)
+    if (familia) {
+      return familia.Nombre_familia;
+    } else {
+      return "NA";
+    }
+  }
+
+  mapearProveedor(id:number) {
+    const proveedor = this.proveedores.find(proveedor => proveedor.id === id)
+    if (proveedor) {
+      return proveedor.nombre;
+    } else {
+      return "NA";
+    }
+  }
+
+  resetForm() {
+    this.newProductos = {
+      id_producto: 0,
+      Nombre_Producto: '',
+      Descripcion: '',
+      Precio_Compra: undefined,
+      Precio_venta: undefined,
+      Id_Categoria: 0,
+      Id_Familia: 0, 
+      Id_Proveedor: 0, 
+    };
+  }
+}

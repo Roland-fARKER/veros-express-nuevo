@@ -28,13 +28,13 @@
     <ng-template pTemplate="header">
       <tr>
         <th style="width:5%">ID</th>
-        <th style="width:20%">Nombre</th>
-        <th style="width:20%">Descripcion</th>
-        <th style="width:20%">Stock</th>
-        <th style="width:20%">Precio Compra</th>
-        <th style="width:20%">Precio Venta</th>
-        <th style="width:20%">Precio Unitario</th>
-        <th style="width:20%">Acciones</th>
+        <th style="width:10%">Nombre</th>
+        <th style="width:15%">Descripcion</th>
+        <th style="width:5%">Categoria</th>
+        <th style="width:5%">Proveedor</th>
+        <th style="width:10%">Precio Compra</th>
+        <th style="width:10%">Precio Venta</th>
+        <th style="width:10%">Acciones</th>
       </tr>
     </ng-template>
 
@@ -62,19 +62,28 @@
             </ng-template>
           </p-cellEditor>
         </td>
-        <!-- Fin -->
-        <!-- Inicio Stock -->
         <td>
           <p-cellEditor>
             <ng-template pTemplate="input">
-              <input pInputText type="text" [(ngModel)]="productos.Stock" required>
+              <input type="number" [(ngModel)]="productos.Id_Categoria" required>
             </ng-template>
             <ng-template pTemplate="output">
-              {{ productos.Stock }}
+              {{ mapearCategoria(productos.Id_Categoria) }}
+            </ng-template>
+          </p-cellEditor>
+        </td>
+        <td>
+          <p-cellEditor>
+            <ng-template pTemplate="input">
+              <input type="number" [(ngModel)]="productos.Id_Proveedor" required>
+            </ng-template>
+            <ng-template pTemplate="output">
+              {{ mapearProveedor(productos.Id_Proveedor) }}
             </ng-template>
           </p-cellEditor>
         </td>
         <!-- Fin -->
+       
         <!-- Inicio Precio Compra -->
         <td>
           <p-cellEditor>
@@ -82,7 +91,7 @@
               <input pInputText type="text" [(ngModel)]="productos.Precio_Compra" required>
             </ng-template>
             <ng-template pTemplate="output">
-              {{ productos.Precio_Compra }}
+              C$ {{ productos.Precio_Compra }}
             </ng-template>
           </p-cellEditor>
         </td>
@@ -94,23 +103,12 @@
               <input pInputText type="text" [(ngModel)]="productos.Precio_venta" required>
             </ng-template>
             <ng-template pTemplate="output">
-              {{ productos.Precio_venta }}
+              C$ {{ productos.Precio_venta }}
             </ng-template>
           </p-cellEditor>
         </td>
         <!-- Fin -->
-        <!-- Inicio Stock -->
-        <td>
-          <p-cellEditor>
-            <ng-template pTemplate="input">
-              <input pInputText type="text" [(ngModel)]="productos.Precio_Unitario" required>
-            </ng-template>
-            <ng-template pTemplate="output">
-              {{ productos.Precio_Unitario }}
-            </ng-template>
-          </p-cellEditor>
-        </td>
-        <!-- Fin -->
+       
 
         <td>
           <div class="flex align-items-center justify-content-center gap-2">
@@ -155,39 +153,27 @@
         </div>
       </div>
       <!-- Fin -->
-      <!-- Inicio Stock -->
-      <div class="form-group">
-        <div class="p-inputgroup">
-          <span class="p-inputgroup-addon">
-            <i class="pi pi-shopping-bag"></i>
-          </span>
-          <input id="Stock" name="Stock" [(ngModel)]="newProductos.Stock" required pInputText type="text"
-            placeholder="Stock" />
-        </div>
-      </div>
-      <!-- Fin -->
       <!--Inicio Dropdown Categoria-->
       <div class="card flex justify-content-center">
-        <form [formGroup]="formGroup">
-          <p-dropdown formControlName="selectedCategorias" [options]="categorias" optionLabel="Nombre_Categoria"
-            placeholder="Seleccione una categoria"></p-dropdown>
-        </form>
+
+        <p-dropdown [options]="categorias" [(ngModel)]="categoriaselect" optionLabel="Nombre_Categoria"
+          placeholder="Seleccione una categoria"></p-dropdown>
+
       </div>
       <!--Fin-->
       <!--Inicio Dropdown Familia-->
       <div class="card flex justify-content-center">
-        <form [formGroup]="formGroup1">
-          <p-dropdown formControlName="selectedFamilias" [options]="familia" optionLabel="Nombre_familia"
-            placeholder="Seleccione una Familia"></p-dropdown>
-        </form>
+
+        <p-dropdown [options]="familia" [(ngModel)]="familiaSelect" optionLabel="Nombre_familia"
+          placeholder="Seleccione una Familia"></p-dropdown>
+
       </div>
       <!--Fin-->
       <!--Inicio Dropdown Proveedores-->
       <div class="card flex justify-content-center">
-        <form [formGroup]="formGroup2">
-          <p-dropdown formControlName="selectedProveedores" [options]="proveedores" optionLabel="nombre"
-            placeholder="Seleccione los Proveedores"></p-dropdown>
-        </form>
+
+        <p-dropdown [options]="proveedores" [(ngModel)]="proveedorSelect" optionLabel="nombre"
+          placeholder="Seleccione los Proveedores"></p-dropdown>
       </div>
       <!--Fin-->
       <!-- Inicio Precio Compra -->
@@ -212,17 +198,6 @@
         </div>
       </div>
       <!-- Fin -->
-      <!-- Inicio Precio Unitario -->
-      <div class="form-group">
-        <div class="p-inputgroup">
-          <span class="p-inputgroup-addon">
-            <i class="pi pi-dollar"></i>
-          </span>
-          <input id="Precio Unitario" name="Precio Unitario" [(ngModel)]="newProductos.Precio_Unitario" required
-            pInputText type="text" placeholder="Precio Unitario" />
-        </div>
-      </div>
-      <!-- Finalizo -->
 
     </div>
 

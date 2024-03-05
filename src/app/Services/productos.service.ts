@@ -36,7 +36,6 @@ export class ProductosService {
 
     // Convertir el campo "Precio_venta" a tipo number
     productosWithoutId.Precio_venta = Number(productosWithoutId.Precio_venta);
-
   
     // Agrega la palabra "Agregar" a la URL
     const apiUrlWithAction = `${this.apiUrl}/Enviar`;
@@ -46,7 +45,6 @@ export class ProductosService {
   
   updateProductos(id_producto: number, productos: Productos): Observable<Productos> {
     const { id_producto: productosId, ...productosWithoutId } = productos;
-
     productosWithoutId.Precio_Compra = Number(productosWithoutId.Precio_Compra);
     productosWithoutId.Precio_venta = Number(productosWithoutId.Precio_venta);
     const url = `${this.apiUrl}/actualizar/${id_producto}`;

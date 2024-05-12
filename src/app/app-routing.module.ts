@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-
 import { ButtonModule } from 'primeng/button';
 
 //componentes
@@ -70,8 +69,4 @@ const routes: Routes = [
   },
 ];
 
-@NgModule({
-  imports: [RouterModule.forRoot(routes), ButtonModule],
-  exports: [RouterModule, ButtonModule],
-})
-export class AppRoutingModule { }
+export const AppRoutingModule = RouterModule.forRoot(routes, { useHash: true });

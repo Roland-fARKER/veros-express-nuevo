@@ -14,7 +14,7 @@ export interface Proveedor {
   providedIn: 'root',
 })
 export class ProveedorService {
-  private apiUrl = 'http://localhost:3000/verosApi/v1/proveedores'; 
+  private apiUrl = 'https://verosback-default--production-roland-farker.sierranegra.cloud/verosApi/v1/proveedores'; 
 
   constructor(private http: HttpClient) {}
 

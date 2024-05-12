@@ -12,7 +12,7 @@ export interface Categorias {
   providedIn: 'root',
 })
 export class CategoriasService {
-  private apiUrl = 'http://localhost:3000/verosApi/v1/categoria';
+  private apiUrl = 'https://verosback-default--production-roland-farker.sierranegra.cloud/verosApi/v1/categoria';
 
   constructor(private http: HttpClient) {}
 

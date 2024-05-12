@@ -13,7 +13,7 @@ interface Almacene {
   providedIn: 'root',
 })
 export class AlmaceneService {
-  private apiUrl = 'http://localhost:3000/verosApi/v1/almacenes'; 
+  private apiUrl = 'https://verosback-default--production-roland-farker.sierranegra.cloud/verosApi/v1/almacenes'; 
 
   constructor(private http: HttpClient) {}
 

@@ -19,7 +19,7 @@ export interface Productos {
   providedIn: 'root',
 })
 export class ProductosService {
-  private apiUrl = 'http://localhost:3000/verosApi/v1/productos';
+  private apiUrl = 'https://verosback-default--production-roland-farker.sierranegra.cloud/verosApi/v1/productos';
 
   constructor(private http: HttpClient) {}
 

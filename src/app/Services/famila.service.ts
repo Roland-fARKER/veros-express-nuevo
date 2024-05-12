@@ -12,7 +12,7 @@ export interface Familia {
   providedIn: 'root',
 })
 export class FamiliaService {
-  private apiUrl = 'http://localhost:3000/verosApi/v1/familias';
+  private apiUrl = 'https://verosback-default--production-roland-farker.sierranegra.cloud/verosApi/v1/familias';
 
   constructor(private http: HttpClient) {}
 
